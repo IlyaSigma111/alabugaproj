@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Физика: Строение атомного ядра — 2 | Правда / Ложь | 9 класс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a2f4e 0%, #0e1f36 100%);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-wrapper {
+            max-width: 950px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .quiz-card {
+            background: #fffef7;
+            border-radius: 2.2rem;
+            overflow: hidden;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #2c4f8c, #1e3a6b);
+            padding: 1.4rem 2rem;
+            color: #fff8e7;
+            border-bottom: 3px solid #f2c94c;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .quiz-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+
+        .score-progress {
+            background: #f2c94c;
+            color: #1e3a6b;
+            padding: 0.4rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .quiz-body {
+            padding: 2rem 2rem 1.8rem;
+        }
+
+        .question-text {
+            font-size: 1.55rem;
+            font-weight: 600;
+            color: #2e3a3a;
+            line-height: 1.4;
+            margin-bottom: 1.8rem;
+            background: #f3efe6;
+            padding: 1.2rem 1.5rem;
+            border-radius: 1.8rem;
+            border-left: 8px solid #f2c94c;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            background: white;
+            border-radius: 1.5rem;
+            border: 2px solid #e2dcd0;
+            transition: all 0.25s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            min-width: 160px;
+            gap: 0.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .option.selectable:hover {
+            background: #fff5e6;
+            border-color: #f2c94c;
+            transform: translateY(-3px);
+        }
+
+        .option-letter {
+            font-weight: 800;
+            background: #e8e2d4;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            color: #2c4f8c;
+        }
+
+        .option-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2e3a2e;
+        }
+
+        .option.correct-highlight {
+            background: #d9f0dd;
+            border-color: #2a8745;
+        }
+        .option.wrong-highlight {
+            background: #ffe2db;
+            border-color: #d6452a;
+        }
+        .option.selected-highlight {
+            background: #f1e5d6;
+            border-color: #f2c94c;
+        }
+        .disabled-option {
+            pointer-events: none;
+        }
+
+        .feedback {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 1.2rem;
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .feedback-correct {
+            background: #d9f0dd;
+            color: #1f6e3f;
+            border-left: 6px solid #2a8745;
+        }
+
+        .feedback-wrong {
+            background: #ffe2db;
+            color: #bc3f2a;
+            border-left: 6px solid #d6452a;
+        }
+
+        .explanation-box {
+            margin-top: 0.5rem;
+            padding: 0.8rem;
+            background: #f8f4ea;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            color: #4a5c4e;
+            border-left: 4px solid #f2c94c;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #2c4f8c;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.7rem 1.8rem;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+        button:disabled {
+            background: #9bb5d4;
+            cursor: not-allowed;
+        }
+
+        .btn-next {
+            background: #e6952e;
+        }
+
+        .btn-restart {
+            background: #5c6e5a;
+        }
+
+        .progress-info {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            color: #7a684a;
+            text-align: center;
+            background: #f3efdf;
+            padding: 0.5rem;
+            border-radius: 40px;
+        }
+
+        .final-list {
+            background: #faf6ea;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 460px;
+            overflow-y: auto;
+        }
+        .final-item {
+            padding: 0.7rem;
+            border-bottom: 1px solid #e2d8c8;
+        }
+
+        .joke-badge {
+            background: #f2c94c;
+            color: #1e3a6b;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            font-weight: 600;
+        }
+
+        @media (max-width: 620px) {
+            .question-text { font-size: 1.25rem; }
+            .quiz-body { padding: 1.2rem; }
+            .option { padding: 0.7rem 1.2rem; min-width: 120px; }
+            .option-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-wrapper">
+    <div class="quiz-card">
+        <div class="quiz-header">
+            <h1>⚛️ Строение атомного ядра — 2</h1>
+            <p>Физика 9 класс · Правда / Ложь · Новые вопросы + шутка про Алексея Рылова</p>
+            <div class="score-progress" id="progressDisplay">Вопрос 1 из 16</div>
+        </div>
+        <div class="quiz-body" id="quizBody">
+            <!-- динамическое содержимое -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======================= 15 новых вопросов + 1 шуточный про Алексея Рылова =======================
+    const STATEMENTS = [
+        {
+            text: "В ядре урана-235 содержится 92 протона и 143 нейтрона.",
+            correct: true,
+            explanation: "Да, уран имеет порядковый номер 92 (92 протона). Массовое число 235, значит нейтронов: 235 − 92 = 143."
+        },
+        {
+            text: "Протоны и нейтроны вместе называются нуклонами.",
+            correct: true,
+            explanation: "Верно. Нуклоны — это общее название для протонов и нейтронов, составляющих атомное ядро."
+        },
+        {
+            text: "Масса ядра всегда равна сумме масс составляющих его протонов и нейтронов.",
+            correct: false,
+            explanation: "Не равна. Существует дефект массы: часть массы переходит в энергию связи ядра. Масса ядра немного меньше суммы масс нуклонов."
+        },
+        {
+            text: "Чем больше удельная энергия связи ядра, тем оно стабильнее.",
+            correct: true,
+            explanation: "Да, удельная энергия связи (на один нуклон) показывает, насколько прочно связаны нуклоны. Максимум у железа-56."
+        },
+        {
+            text: "При альфа-распаде массовое число ядра уменьшается на 4, а зарядовое — на 2.",
+            correct: true,
+            explanation: "Альфа-частица — это ядро гелия (2 протона + 2 нейтрона), поэтому массовое число уменьшается на 4, а порядковый номер на 2."
+        },
+        {
+            text: "При бета-распаде нейтрон в ядре превращается в протон, испуская электрон и антинейтрино.",
+            correct: true,
+            explanation: "Верно. β⁻-распад: нейтрон → протон + электрон + антинейтрино. Заряд ядра увеличивается на 1, массовое число не меняется."
+        },
+        {
+            text: "Гамма-излучение — это поток быстрых электронов.",
+            correct: false,
+            explanation: "Нет, гамма-излучение — это электромагнитное излучение с очень короткой длиной волны (фотоны). Электроны — это бета-частицы."
+        },
+        {
+            text: "Период полураспада — это время, за которое распадается половина всех радиоактивных ядер.",
+            correct: true,
+            explanation: "Да, это определение периода полураспада. Он может быть от долей секунды до миллиардов лет."
+        },
+        {
+            text: "В ядерном реакторе цепная реакция управляется с помощью стержней, поглощающих нейтроны.",
+            correct: true,
+            explanation: "Верно. Стержни из кадмия или бора поглощают лишние нейтроны, регулируя скорость реакции."
+        },
+        {
+            text: "Термоядерная реакция — это реакция деления тяжёлых ядер под действием нейтронов.",
+            correct: false,
+            explanation: "Термоядерная реакция — это синтез (слияние) лёгких ядер (например, водорода в гелий) при очень высоких температурах. Деление — это другое."
+        },
+        {
+            text: "Изотопы одного элемента имеют разное количество протонов, но одинаковое количество нейтронов.",
+            correct: false,
+            explanation: "Наоборот: изотопы имеют одинаковое число протонов, но разное число нейтронов. Например, углерод-12 и углерод-14."
+        },
+        {
+            text: "Ядерные силы действуют только на расстояниях порядка 10⁻¹⁵ м (размер ядра).",
+            correct: true,
+            explanation: "Да, ядерные силы — короткодействующие. На больших расстояниях они практически исчезают."
+        },
+        {
+            text: "Энергия связи ядра тем больше, чем больше дефект массы.",
+            correct: true,
+            explanation: "Да, энергия связи вычисляется по формуле E = Δm·c². Чем больше дефект массы, тем больше энергия связи."
+        },
+        {
+            text: "Радиоактивные изотопы используются в медицине для диагностики и лечения (например, йод-131).",
+            correct: true,
+            explanation: "Верно. Радиоактивные изотопы применяют в лучевой терапии и диагностике (позитронно-эмиссионная томография)."
+        },
+        {
+            text: "В ядре гелия-4 (α-частице) два протона и один нейтрон.",
+            correct: false,
+            explanation: "В ядре гелия-4 два протона и два нейтрона. Альфа-частица — это и есть ядро гелия-4."
+        },
+        {
+            text: "Алексей Рылов меньше атома?",
+            correct: true,
+            explanation: "Конечно, это шутка! Человек огромен по сравнению с атомом. Но мы отвечаем «ДА» ради смеха 😄 (физически — нет, но по условию игры — да).",
+            isJoke: true
+        }
+    ];
+
+    const TOTAL = STATEMENTS.length;
+    let currentIndex = 0;
+    let userAnswers = new Array(TOTAL).fill(null);
+    let answerStatus = new Array(TOTAL).fill(false);
+    let answered = new Array(TOTAL).fill(false);
+    let quizFinished = false;
+
+    const quizBody = document.getElementById("quizBody");
+    const progressSpan = document.getElementById("progressDisplay");
+
+    function updateProgressUI() {
+        progressSpan.innerText = `Вопрос ${currentIndex+1} из ${TOTAL}`;
+    }
+
+    function onSelectOption(choice) {
+        if (answered[currentIndex] || quizFinished) return;
+        const isCorrect = (choice === STATEMENTS[currentIndex].correct);
+        userAnswers[currentIndex] = choice;
+        answerStatus[currentIndex] = isCorrect;
+        answered[currentIndex] = true;
+        renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+        const st = STATEMENTS[currentIndex];
+        const alreadyAnswered = answered[currentIndex];
+        const selectedVal = userAnswers[currentIndex];
+        const isJoke = st.isJoke || false;
+
+        const options = [
+            { label: "Правда", value: true },
+            { label: "Ложь", value: false }
+        ];
+
+        let optionsHtml = '';
+        options.forEach((opt, idx) => {
+            let additionalClasses = '';
+            const optValue = opt.value;
+            if (alreadyAnswered) {
+                const isCorrectAnswer = (optValue === st.correct);
+                if (isCorrectAnswer) additionalClasses = 'correct-highlight';
+                if (selectedVal === optValue && selectedVal !== null && selectedVal !== st.correct) {
+                    additionalClasses = 'wrong-highlight';
+                }
+                additionalClasses += ' disabled-option';
+            } else {
+                if (selectedVal === optValue) additionalClasses = 'selected-highlight';
+            }
+            const letter = idx === 0 ? 'А' : 'Б';
+            optionsHtml += `
+                <div class="option ${additionalClasses} selectable" data-opt-value="${optValue}">
+                    <div class="option-letter">${letter}</div>
+                    <div class="option-text">${opt.label}</div>
+                </div>
+            `;
+        });
+
+        let feedbackHtml = '';
+        if (alreadyAnswered) {
+            const isAnsCorrect = answerStatus[currentIndex];
+            const correctText = st.correct ? "Правда" : "Ложь";
+            feedbackHtml = `
+                <div class="feedback ${isAnsCorrect ? 'feedback-correct' : 'feedback-wrong'}">
+                    ${isAnsCorrect ? '✅ Верно!' : '❌ Неверно!'}
+                    <div class="explanation-box">
+                        📖 <strong>Пояснение:</strong> ${st.explanation}
+                    </div>
+                </div>
+            `;
+        }
+
+        const answeredCount = answered.filter(a => a === true).length;
+        const progressPercent = Math.round((answeredCount / TOTAL) * 100);
+
+        const isLastQuestion = (currentIndex === TOTAL - 1);
+        const nextBtnText = isLastQuestion ? '🏁 Завершить' : 'Следующий →';
+        const jokeMark = isJoke ? '<span class="joke-badge">😂 Шутка (ответ — ДА!)</span>' : '';
+
+        const normalHtml = `
+            <div class="question-text">
+                ${currentIndex + 1}. ${escapeHtml(st.text)} ${jokeMark}
+            </div>
+            <div class="options-list">
+                ${optionsHtml}
+            </div>
+            ${feedbackHtml}
+            <div class="nav-buttons">
+                <button id="prevBtn" ${currentIndex === 0 ? 'disabled' : ''}>◀ Назад</button>
+                <button id="nextBtn" class="btn-next" ${!alreadyAnswered ? 'disabled' : ''}>${nextBtnText}</button>
+            </div>
+            <div class="progress-info">
+                📍 Вопрос ${currentIndex+1} из ${TOTAL} | Отвечено: ${answeredCount}/${TOTAL} (${progressPercent}%)
+            </div>
+        `;
+        quizBody.innerHTML = normalHtml;
+
+        if (!alreadyAnswered) {
+            document.querySelectorAll('.option.selectable').forEach(optDiv => {
+                const optValue = optDiv.dataset.optValue === 'true';
+                optDiv.addEventListener('click', () => {
+                    if (!answered[currentIndex] && !quizFinished) onSelectOption(optValue);
+                });
+            });
+        }
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0 && !quizFinished) {
+                    currentIndex--;
+                    renderCurrentQuestion();
+                    updateProgressUI();
+                }
+            });
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                if (!answered[currentIndex]) return;
+                if (isLastQuestion) {
+                    finishQuiz();
+                } else {
+                    if (currentIndex + 1 < TOTAL) {
+                        currentIndex++;
+                        renderCurrentQuestion();
+                        updateProgressUI();
+                    }
+                }
+            });
+        }
+        updateProgressUI();
+    }
+
+    function finishQuiz() {
+        quizFinished = true;
+        const correctTotal = answerStatus.filter(v => v === true).length;
+        const percentage = Math.round((correctTotal / TOTAL) * 100);
+        let gradeMsg = '';
+        if (percentage >= 85) gradeMsg = '🎉 Блестяще! Вы отлично знаете строение атомного ядра! И шутку оценили 😄';
+        else if (percentage >= 65) gradeMsg = '👍 Хорошо! Повторите дефект массы и типы распадов.';
+        else gradeMsg = '📚 Попробуйте ещё раз. Внимательно читайте пояснения.';
+
+        let allItemsHtml = '';
+        for (let i = 0; i < TOTAL; i++) {
+            const st = STATEMENTS[i];
+            const userChoice = userAnswers[i];
+            const isUserCorrect = answerStatus[i];
+            const correctText = st.correct ? "Правда" : "Ложь";
+            const userText = (userChoice === true ? "Правда" : (userChoice === false ? "Ложь" : "Нет ответа"));
+            const jokeIcon = st.isJoke ? ' 🎭' : '';
+            allItemsHtml += `
+                <div class="final-item">
+                    <strong>${i+1}. ${escapeHtml(st.text)}${jokeIcon}</strong><br>
+                    <span style="color: ${isUserCorrect ? '#2a8745' : '#d6452a'};">
+                        ${isUserCorrect ? '✅ Верно' : '❌ Ошибка'}
+                    </span><br>
+                    <span>📖 Правильный ответ: ${correctText}</span><br>
+                    ${!isUserCorrect ? `<span>✏️ Ваш ответ: ${userText}</span><br>` : ''}
+                    <div class="explanation-box" style="margin-top: 0.5rem;">📖 ${st.explanation}</div>
+                </div>
+            `;
+        }
+
+        const finalHtml = `
+            <div class="question-text">📊 РЕЗУЛЬТАТ ВИКТОРИНЫ</div>
+            <div class="final-list" style="margin-bottom:1rem;">
+                <div style="background: #faf6ea; border-radius: 1rem; padding: 1rem; text-align: center; margin-bottom: 1rem;">
+                    <span style="font-size: 1.5rem; font-weight: 700;">${correctTotal} / ${TOTAL} (${percentage}%)</span>
+                    <p style="margin-top: 0.5rem;">${gradeMsg}</p>
+                </div>
+                ${allItemsHtml}
+            </div>
+            <div class="nav-buttons" style="justify-content: center;">
+                <button id="restartBtn" class="btn-restart">🔄 Пройти викторину заново</button>
+            </div>
+        `;
+        quizBody.innerHTML = finalHtml;
+        document.getElementById("restartBtn")?.addEventListener("click", () => restartQuiz());
+    }
+
+    function restartQuiz() {
+        currentIndex = 0;
+        userAnswers = new Array(TOTAL).fill(null);
+        answerStatus = new Array(TOTAL).fill(false);
+        answered = new Array(TOTAL).fill(false);
+        quizFinished = false;
+        renderCurrentQuestion();
+        updateProgressUI();
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    renderCurrentQuestion();
+    updateProgressUI();
+</script>
+</body>
+</html>
