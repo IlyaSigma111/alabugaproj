@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Код инженерии | Политех & Фиксики</title>
+    <!-- Шрифты: индустриальный гротеск + технологичный акцент -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0f1c;
+            font-family: 'Inter', sans-serif;
+            color: #eef2ff;
+            line-height: 1.4;
+            scroll-behavior: smooth;
+        }
+
+        /* "Алабуга Политех" стиль: бетон, металл, акцентные желтые/оранжевые вставки, сетка */
+        .site-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: radial-gradient(circle at 10% 20%, #101624, #070b14);
+            position: relative;
+        }
+
+        /* имитация чертежной сетки */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* контент поверх сетки */
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem 2rem 4rem;
+        }
+
+        /* типичные блоки-слайды в стиле "карточки проекта" */
+        .slide {
+            background: rgba(12, 18, 28, 0.75);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 200, 50, 0.3);
+            border-radius: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 2rem 2rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+        }
+
+        .slide:hover {
+            border-color: #fbbf24;
+            background: rgba(16, 24, 36, 0.85);
+        }
+
+        /* индустриальные заголовки */
+        .badge {
+            display: inline-block;
+            background: #f59e0b20;
+            color: #fbbf24;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-left: 3px solid #f59e0b;
+            margin-bottom: 1.2rem;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFF, #fbbf24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 1rem 0 0.8rem;
+            background: linear-gradient(120deg, #e2e8f0, #facc15);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+            border-bottom: 3px solid #f59e0b;
+            padding-bottom: 0.25rem;
+        }
+
+        /* фиксики-стиль: шестеренки, маленькие иконки */
+        .fixie-icon {
+            font-family: monospace;
+            font-size: 1.4rem;
+            background: #1e293b;
+            display: inline-block;
+            width: 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-right: 8px;
+        }
+
+        .speaker {
+            font-weight: 700;
+            color: #facc15;
+            font-size: 1.2rem;
+            letter-spacing: -0.3px;
+            border-left: 4px solid #facc15;
+            padding-left: 0.8rem;
+            margin: 1.2rem 0 0.7rem;
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            line-height: 1.45;
+            font-weight: 500;
+            margin-top: 0.3rem;
+            color: #eef2ffdd;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1.2rem;
+        }
+
+        .program-card {
+            background: #0f172ab3;
+            border-radius: 1.5rem;
+            padding: 1.4rem;
+            border: 1px solid #334155;
+            transition: 0.2s;
+        }
+
+        .program-card:hover {
+            border-color: #facc15;
+            transform: translateY(-3px);
+        }
+
+        .program-card h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #facc15;
+            margin-bottom: 0.5rem;
+        }
+
+        .partner-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .partner {
+            background: #1e293b;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            border: 1px solid #facc1544;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px dashed #facc1533;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* кнопка-шестеренка */
+        .gear {
+            background: #facc1510;
+            border-radius: 60px;
+            padding: 0.2rem 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 700px) {
+            .content {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .slide {
+                padding: 1.4rem;
+            }
+        }
+
+        /* анимированный акцент */
+        @keyframes blinkYellow {
+            0% { text-shadow: 0 0 0px #facc15; }
+            100% { text-shadow: 0 0 6px #facc15; }
+        }
+        .attention {
+            animation: blinkYellow 1s infinite alternate;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="site-container">
+    <div class="content">
+        <!-- шапка в стиле политех / алабуга -->
+        <div class="slide" style="background: #020617cc; text-align: center; border-bottom: 3px solid #facc15;">
+            <div class="gear">⚙️ ФИКСИКИ ПРЕЗЕНТУЮТ ⚡</div>
+            <h1 style="margin-top: 0.5rem;">«КОД ИНЖЕНЕРИИ»</h1>
+            <p style="font-size: 1.2rem; margin-top: 0.5rem; font-family: monospace;">10А команда | Инженерное будущее уже здесь</p>
+            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <span class="badge">#ПРОФТЕХ</span>
+                <span class="badge">#РЕАЛЬНЫЕ_КЕЙСЫ</span>
+                <span class="badge">#ФИКСИКИ_В_ДЕЛЕ</span>
+            </div>
+        </div>
+
+        <!-- Слайд: Артем приветствие + забыли все проекты -->
+        <div class="slide">
+            <div class="speaker">🎙️ Артём:</div>
+            <div class="quote-text">«Добрый день, уважаемые жюри и участники форума! Мы — 10ая команда, хотим представить наш проект «Код инженерии». Внимание на экран!»</div>
+            <div style="margin: 1.2rem 0 0.5rem; background: #00000055; padding: 1rem; border-radius: 1rem; text-align: center; border: 1px solid #facc15;">
+                <span style="font-size: 2rem;">✨</span> <strong class="attention">ОТНЫНЕ ВЫ ЗАБЫЛИ ВСЕ ПРЕДЫДУЩИЕ ПРОЕКТЫ И ПОМНИТЕ ТОЛЬКО НАШ</strong> <span style="font-size: 2rem;">✨</span>
+            </div>
+            <div class="gear" style="margin-top: 12px;">🧷 Тематика: Фиксики — чиним, создаём, изобретаем!</div>
+        </div>
+
+        <!-- Ваня: Актуальность -->
+        <div class="slide">
+            <div class="speaker">🧑‍🔧 Ваня:</div>
+            <div class="quote-text">«Актуальность нашего проекта в том, что современные школьники не видят реальных возможностей инженерной профессии. Они изучают только формулы и теорию, но не могут увидеть, как это работает на практике.»</div>
+            <div style="margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                <span class="badge">📉 разрыв теории и практики</span>
+                <span class="badge">🔧 нужны живые инженерные задачи</span>
+            </div>
+        </div>
+
+        <!-- Люда: проблема -->
+        <div class="slide">
+            <div class="speaker">💡 Люда:</div>
+            <div class="quote-text">«Главная проблема — нехватка ресурсов и возможностей для того, чтобы школьники могли лучше узнать инженерную профессию. У них нет доступа к реальным примерам работы инженеров и возможности попробовать себя в этой сфере.»</div>
+        </div>
+
+        <!-- Цель и задачи от Светы -->
+        <div class="slide">
+            <div class="speaker">🎯 Света:</div>
+            <div class="quote-text">«Наша цель — познакомить школьников всех возрастов и педагогов с инженерной профессией, чтобы заинтересовать их техническими направлениями. Показать, насколько интересной и важной может быть работа инженера.»</div>
+            <h3 style="margin-top: 1.8rem;">📋 Задачи проекта</h3>
+            <div class="grid-2col" style="margin-top: 0.5rem;">
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li style="margin-bottom: 0.5rem;">✓ Создать рабочую группу и сообщества единомышленников</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Разработать образовательные модули для разных возрастных групп</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Привлечь заинтересованных партнеров</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Организовать практические занятия и стажировки</li>
+                </ul>
+                <ul style="list-style-type: none; padding-left: 0;">
+                    <li style="margin-bottom: 0.5rem;">✓ Создание платформы для обмена опытом</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Привлечение ведущих специалистов отрасли</li>
+                </ul>
+            </div>
+            <div class="quote-text" style="margin-top: 1rem; background: #0f172a; padding: 0.6rem; border-radius: 1rem;">
+                🎓 Целевая аудитория: обучающиеся с 1 по 11 класс и педагоги
+            </div>
+        </div>
+
+        <!-- Настя: программы для групп -->
+        <div class="slide">
+            <div class="speaker">📚 Настя:</div>
+            <div class="quote-text">«Для каждой группы мы создали специальные программы:»</div>
+            <div class="grid-2col" style="margin-top: 1.5rem;">
+                <div class="program-card">
+                    <h4>🧸 Младшие классы</h4>
+                    <p>Интерактивная игра «Инженерная неделя»: задания, монетки, строительство дома из купленных материалов.</p>
+                    <div class="gear">🏠 стройка-игра</div>
+                </div>
+                <div class="program-card">
+                    <h4>📖 Средние классы</h4>
+                    <p>Экскурсии и встречи с экспертами, сайт-навигатор по инженерным направлениям.</p>
+                    <div class="gear">🌐 digital-платформа</div>
+                </div>
+                <div class="program-card">
+                    <h4>🚀 Старшеклассники</h4>
+                    <p>Онлайн-курсы, форум, экскурсии на предприятия и стажировки от партнёров.</p>
+                    <div class="gear">💼 реальный опыт</div>
+                </div>
+                <div class="program-card">
+                    <h4>👩‍🏫 Педагоги</h4>
+                    <p>Лекции и форумы по профориентации + новейшие технологии в образовании.</p>
+                    <div class="gear">📡 повышение квалификации</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Артём: Концепция форума -->
+        <div class="slide">
+            <div class="speaker">🏛️ Артём:</div>
+            <div class="quote-text">«Концепция форума включает:»</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.2rem 0;">
+                <div style="background:#1e293b; padding: 0.75rem 1rem; border-radius: 1.2rem; flex:1;">
+                    🔹 Проведение в <strong>Новосибирске и Тюмени</strong> (по два потока)
+                </div>
+                <div style="background:#1e293b; padding: 0.75rem 1rem; border-radius: 1.2rem; flex:1;">
+                    🔹 3 потока ×150 обучающихся (1-11 класс)
+                </div>
+                <div style="background:#1e293b; padding: 0.75rem 1rem; border-radius: 1.2rem; flex:1;">
+                    🔹 Отдельный поток для педагогов (50 чел)
+                </div>
+            </div>
+            <ul style="margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <li>🎥 Онлайн-курсы с экспертами</li>
+                <li>⚙️ Решение практических задач</li>
+                <li>🎬 Создание видеопрезентаций</li>
+                <li>💼 Работа над кейсами от партнёров</li>
+                <li>⭐ Выявление инициативных ребят для стажировки</li>
+            </ul>
+        </div>
+
+        <!-- Площадки проведения + слайд с площадками (визуализация) -->
+        <div class="slide">
+            <div class="speaker">🗺️ Локации:</div>
+            <div class="grid-2col">
+                <div>
+                    <h3 style="font-size:1.2rem;">🔵 Новосибирск</h3>
+                    <p>• Образовательный парк им. Кошевого<br>• РЦ «Альтаир»</p>
+                </div>
+                <div>
+                    <h3 style="font-size:1.2rem;">🟠 Тюмень</h3>
+                    <p>• Площадь Четырехсот-летия<br>• Контора Пароходства<br>• Водонапорная Башня</p>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; background: #00000033; border-radius: 1rem; padding: 1rem; text-align: center; border: 1px dashed #facc15;">
+                📸 На экране показаны наши площадки — архитектура инженерии и креатива
+            </div>
+        </div>
+
+        <!-- Партнёры проекта -->
+        <div class="slide">
+            <div class="speaker">🤝 Стратегические партнёры:</div>
+            <div class="partner-list">
+                <span class="partner">Научный центр Сибири</span>
+                <span class="partner">Сбербанк</span>
+                <span class="partner">Т-банк</span>
+                <span class="partner">СО РАН</span>
+                <span class="partner">ФМШ</span>
+                <span class="partner">РусГидро</span>
+                <span class="partner">Движение Первых</span>
+                <span class="partner">РосМолодёжь</span>
+                <span class="partner">Фонд Тимченко</span>
+            </div>
+            <div style="margin-top: 1.2rem; font-style: italic; color: #facc15;">«Благодарим за внимание! Готовы ответить на ваши вопросы»</div>
+            <div class="gear" style="margin-top: 1rem;">⚙️ #КОД_ИНЖЕНЕРИИ #ПОЛИТЕХ_ФИКСИКИ</div>
+        </div>
+
+        <!-- Дополнительный блок "Алабуга-стиль" - инженерная черта -->
+        <div class="slide" style="text-align: center; background: #0a0f1cee;">
+            <div style="font-size: 2rem;">🔧🔩⚙️🧷</div>
+            <p style="font-family: monospace; letter-spacing: 2px;">"От идеи до механизма — один код" | Проект «Код инженерии» — 10А команда</p>
+            <div style="margin-top: 0.8rem; display: flex; justify-content: center; gap: 0.5rem;">
+                <span>✦ Форум Новосибирск/Тюмень ✦</span>
+                <span>✦ Стажировки ✦</span>
+                <span>✦ Онлайн-курсы ✦</span>
+            </div>
+        </div>
+
+        <!-- имитация мини-слайдера или дополнительных деталей: требования сценария выполнены -->
+        <div class="footer-note">
+            <span>© 10я команда | Инженерный проект «Код инженерии» в стиле Алабуга Политеха + вселенные Фиксиков</span><br>
+            <span style="font-size:0.7rem;">#забудьте_предыдущие_проекты</span>
+        </div>
+    </div>
+</div>
+
+<!-- Микроинтерактив для атмосферы (консольная фраза) -->
+<script>
+    (function() {
+        console.log("%c⚙️ КОД ИНЖЕНЕРИИ | Презентация 10А команды | Фиксики перезагружают профориентацию", "color: #facc15; font-size: 16px; font-weight: bold;");
+        // лёгкий эффект - напоминание наведения
+        const cards = document.querySelectorAll('.program-card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                // ничего навязчивого, просто маленький фикс-тач
+                console.log("🔧 Инженерная программа активирована!");
+            });
+        });
+    })();
+</script>
+</body>
+</html>
