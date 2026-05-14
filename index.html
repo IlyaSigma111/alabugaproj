@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Код инженерии | Политех & Фиксики — ультраглассморфизм</title>
+    <!-- шрифты: современный гротеск + моно для технологичности -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at 20% 30%, #0a0f1f, #03060c);
+            font-family: 'Inter', 'Space Grotesk', sans-serif;
+            color: #f0f3ff;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* УЛЬТРАГЛАССМОРФИЗМ: стеклянные карты, размытие, свечение, границы */
+        .glass-card {
+            background: rgba(20, 28, 40, 0.35);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 210, 90, 0.25);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(250, 204, 21, 0.6);
+            background: rgba(30, 40, 55, 0.45);
+            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.5), 0 0 18px rgba(250, 204, 21, 0.2);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+            position: relative;
+        }
+
+        /* динамическая сетка с микролиниями */
+        .grid-mesh {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+            background-size: 55px 55px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* заголовки */
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 20%, #facc15 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #facc15, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .section-sub {
+            color: #94a3b8;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.75rem;
+        }
+
+        /* хедер с эффектом стекла */
+        .hero {
+            padding: 2rem 2rem 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(250, 204, 21, 0.3);
+        }
+
+        .badge-group {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .tech-badge {
+            background: rgba(250, 204, 21, 0.12);
+            backdrop-filter: blur(8px);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            font-family: monospace;
+        }
+
+        /* сетка карточек */
+        .grid-2, .grid-3 {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .info-panel {
+            padding: 1.6rem;
+            height: 100%;
+        }
+
+        .info-panel i {
+            font-size: 2rem;
+            color: #facc15;
+            margin-bottom: 1rem;
+        }
+
+        .info-panel h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* стиль для аудиторий и программ */
+        .program-tile {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: 0.2s;
+            border: 1px solid rgba(250, 204, 21, 0.2);
+        }
+
+        .program-tile h4 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #facc15;
+        }
+
+        .partner-scroll {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .partner-item {
+            background: rgba(255,255,240,0.05);
+            backdrop-filter: blur(4px);
+            padding: 0.6rem 1.3rem;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid rgba(250, 204, 21, 0.3);
+            transition: 0.2s;
+        }
+
+        .location-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: space-between;
+        }
+
+        .location-card {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .glow-text {
+            text-shadow: 0 0 6px rgba(250,204,21,0.4);
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        hr {
+            border-color: rgba(250,204,21,0.2);
+            margin: 1rem 0;
+        }
+
+        .fixie-icon-big {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 5px #facc15);
+        }
+    </style>
+</head>
+<body>
+<div class="grid-mesh"></div>
+<div class="container">
+    <!-- Hero - стеклянный блок с логотипом проекта -->
+    <div class="glass-card hero">
+        <div class="fixie-icon-big">⚙️🔧🧷</div>
+        <h1>КОД ИНЖЕНЕРИИ</h1>
+        <div class="badge-group">
+            <span class="tech-badge"><i class="fas fa-microchip"></i> ФИКСИКИ ТЕМА</span>
+            <span class="tech-badge"><i class="fas fa-users"></i> 10А команда</span>
+            <span class="tech-badge"><i class="fas fa-wrench"></i> Инженерный форум</span>
+        </div>
+        <p style="max-width: 700px; margin: 1rem auto 0; font-size: 1.2rem;">Стираем границы между теорией и практикой. Забыли старые проекты — здесь рождается инженерное будущее.</p>
+        <div style="margin-top: 1rem;"><i class="fas fa-arrow-down" style="color:#facc15;"></i> <span style="font-family: monospace;">#новый_уровень_профориентации</span></div>
+    </div>
+
+    <!-- Актуальность и проблема  (слияние текстов Вани и Люды) -->
+    <div class="glass-card info-panel" style="margin-bottom: 2rem;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3>Почему сейчас?</h3>
+        <p style="font-size: 1.1rem; margin-top: 0.5rem;">Современные школьники не видят реальных возможностей инженерной профессии. Формулы и теория остаются сухим текстом, а доступа к живым задачам и примерам работы инженеров практически нет. <strong>Нехватка ресурсов</strong> и практического опыта — главный барьер.</p>
+        <div class="badge-group" style="justify-content: flex-start; margin-top: 1rem;">
+            <span class="tech-badge">🔎 83% школьников хотят примерять профессию</span>
+            <span class="tech-badge">🏭 дефицит инженерных кадров</span>
+        </div>
+    </div>
+
+    <!-- ЦЕЛЬ И ЗАДАЧИ (Света) -->
+    <div class="glass-card info-panel" style="margin-bottom: 2rem;">
+        <i class="fas fa-bullseye"></i>
+        <h3>Цель проекта</h3>
+        <p style="font-size: 1.15rem;">Познакомить школьников всех возрастов и педагогов с инженерной профессией, показать её важность и многогранность через реальные кейсы, игры, стажировки и современные форматы.</p>
+        <hr>
+        <div class="grid-2" style="margin-top: 0.5rem; gap: 1rem;">
+            <div>
+                <h4 style="color:#facc15; margin-bottom: 0.8rem;"><i class="fas fa-tasks"></i> Ключевые задачи</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✓ Создать сообщество единомышленников</li>
+                    <li>✓ Разработать модули для всех возрастов</li>
+                    <li>✓ Привлечь партнёров (Сбер, РАН, РусГидро...)</li>
+                    <li>✓ Организовать стажировки и практикумы</li>
+                    <li>✓ Платформа обмена опытом</li>
+                    <li>✓ Ведущие специалисты отрасли</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color:#facc15; margin-bottom: 0.8rem;"><i class="fas fa-users"></i> Целевая аудитория</h4>
+                <div class="tech-badge" style="display: inline-block; margin: 0.2rem;">1-4 классы</div>
+                <div class="tech-badge" style="display: inline-block; margin: 0.2rem;">5-8 классы</div>
+                <div class="tech-badge" style="display: inline-block; margin: 0.2rem;">9-11 классы</div>
+                <div class="tech-badge" style="display: inline-block; margin: 0.2rem;">Педагоги</div>
+                <p style="margin-top: 1rem;"><i class="fas fa-chalkboard-user"></i> 1500+ участников в пилотных потоках</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Программы для каждой группы (Настя) -->
+    <div class="glass-card info-panel" style="margin-bottom: 2rem;">
+        <i class="fas fa-layer-group"></i>
+        <h3>Образовательные программы под поколение</h3>
+        <div class="grid-3" style="margin-top: 1rem;">
+            <div class="program-tile">
+                <h4>🧸 1–4 классы</h4>
+                <p>«Инженерная игровая неделя»: задания, монетки, стройматериалы. В финале — строим настоящий дом из купленных ресурсов. Иммерсивно и весело!</p>
+                <i class="fas fa-gamepad" style="color:#facc15;"></i> геймификация
+            </div>
+            <div class="program-tile">
+                <h4>📚 5–8 классы</h4>
+                <p>Экскурсии на предприятия, встречи с экспертами, интерактивный сайт-навигатор по инженерным специальностям «Инженериум».</p>
+                <i class="fas fa-chalkboard"></i> живые диалоги
+            </div>
+            <div class="program-tile">
+                <h4>🚀 9–11 классы</h4>
+                <p>Онлайн-курсы от практиков, форум с решением кейсов партнёров, экскурсии на заводы и стажировки с трудоустройством инициативных.</p>
+                <i class="fas fa-briefcase"></i> карьерный трек
+            </div>
+            <div class="program-tile">
+                <h4>👩‍🏫 Педагоги</h4>
+                <p>Лекции по профориентации, форумы о новых технологиях, методические материалы по внедрению инженерного мышления.</p>
+                <i class="fas fa-chalkboard-user"></i> апгрейд компетенций
+            </div>
+        </div>
+    </div>
+
+    <!-- Концепция форума (Артём) -->
+    <div class="glass-card info-panel" style="margin-bottom: 2rem;">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Форум «Код инженерии» — масштаб</h3>
+        <div class="grid-2" style="gap: 1.2rem;">
+            <div>
+                <p><i class="fas fa-map-marker-alt" style="color:#facc15;"></i> <strong>2 города:</strong> Новосибирск + Тюмень (по 2 потока в каждом)</p>
+                <p><i class="fas fa-users-between"></i> <strong>3 потока</strong> по 150 обучающихся (1-11 класс) + отдельный поток педагогов (50 человек)</p>
+                <p><i class="fas fa-laptop-code"></i> Онлайн-курсы с инженерами-экспертами</p>
+                <p><i class="fas fa-microphone-alt"></i> Решение практических кейсов от партнёров, защита видеопрезентаций</p>
+                <p><i class="fas fa-rocket"></i> Выявление лидеров для оплачиваемых стажировок</p>
+            </div>
+            <div>
+                <div class="location-list">
+                    <div class="location-card glass-card" style="background:rgba(0,0,0,0.2);">
+                        <i class="fas fa-city"></i>
+                        <h4>Новосибирск</h4>
+                        <p>Образовательный парк им. Кошевого<br>РЦ «Альтаир»</p>
+                    </div>
+                    <div class="location-card glass-card" style="background:rgba(0,0,0,0.2);">
+                        <i class="fas fa-water"></i>
+                        <h4>Тюмень</h4>
+                        <p>Площадь 400-летия<br>Контора Пароходства<br>Водонапорная Башня</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tech-badge" style="margin-top: 1rem; display: inline-block;"><i class="fas fa-video"></i> На экране — наши уникальные площадки с атмосферой технологического наследия</div>
+    </div>
+
+    <!-- Партнёры проекта (мощная экосистема) -->
+    <div class="glass-card info-panel" style="margin-bottom: 2rem;">
+        <i class="fas fa-handshake"></i>
+        <h3>Индустриальные партнёры</h3>
+        <div class="partner-scroll">
+            <span class="partner-item">🔬 Научный центр Сибири</span>
+            <span class="partner-item">🏦 Сбербанк</span>
+            <span class="partner-item">💳 Т-банк</span>
+            <span class="partner-item">🧪 СО РАН</span>
+            <span class="partner-item">📐 ФМШ</span>
+            <span class="partner-item">💧 РусГидро</span>
+            <span class="partner-item">⭐ Движение Первых</span>
+            <span class="partner-item">🇷🇺 РосМолодёжь</span>
+            <span class="partner-item">🤝 Фонд Тимченко</span>
+        </div>
+        <p style="margin-top: 1rem;"><i class="fas fa-chart-line"></i> Благодаря партнёрству создаём реальные кейсы и стажировки для молодых инженеров.</p>
+    </div>
+
+    <!-- Ключевые отличия / Фиксики решают проблемы -->
+    <div class="glass-card info-panel" style="margin-bottom: 2rem;">
+        <i class="fas fa-lightbulb"></i>
+        <h3>Почему «Код инженерии» изменит правила?</h3>
+        <div class="grid-2" style="margin-top: 1rem;">
+            <div>
+                <i class="fas fa-microchip"></i> <strong>Гибридный формат</strong><br>Офлайн + онлайн-курсы, доступ к материалам 24/7
+            </div>
+            <div>
+                <i class="fas fa-brain"></i> <strong>Инженерное мышление</strong><br>Игры, конструкторы, работа над реальными запросами предприятий
+            </div>
+            <div>
+                <i class="fas fa-school"></i> <strong>Вовлечение педагогов</strong><br>Обучение учителей — тиражирование практик в школах
+            </div>
+            <div>
+                <i class="fas fa-network-wired"></i> <strong>Сообщество</strong><br>Платформа обмена опытом среди юных инженеров по всей РФ
+            </div>
+        </div>
+    </div>
+
+    <!-- Цитата / мотивационный блок с отсылкой к сценарию (благодарность)-->
+    <div class="glass-card" style="padding: 2rem; text-align: center;">
+        <div style="font-size: 2rem;">🧷🔧⚙️</div>
+        <p style="font-size: 1.3rem; font-weight: 500;">«Отныне вы забыли все предыдущие проекты и помните только наш»<br>
+        — команда 10А, создатели «Кода инженерии»</p>
+        <div class="badge-group" style="justify-content: center; margin-top: 1rem;">
+            <span class="tech-badge"><i class="fas fa-comment-dots"></i> Готовы ответить на вопросы</span>
+            <span class="tech-badge"><i class="fas fa-trophy"></i> Форум Новосибирск & Тюмень</span>
+        </div>
+        <p style="margin-top: 1rem; font-family: monospace;">#инженериязавтра #фиксикирекомендуют #код_инженерии</p>
+    </div>
+
+    <footer>
+        <hr>
+        <p>© 10А команда. Проект «Код инженерии» — ультраглассморфизм, технологии будущего. Все данные соответствуют презентации форума 2025.</p>
+        <p style="margin-top: 0.5rem;">Площадки: Образовательный парк им. Кошевого (Новосибирск) | Контора Пароходства (Тюмень) | Альтаир</p>
+    </footer>
+</div>
+<!-- дополнительный микроэффект при загрузке -->
+<script>
+    (function() {
+        // просто стильный лог
+        console.log("%c⚡ КОД ИНЖЕНЕРИИ | ультраглассморфизм активирован | Фиксики в деле", "color: #facc15; font-size: 14px; font-weight: bold;");
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(c => {
+            c.addEventListener('mouseenter', (e) => {
+                // лёгкая анимация курсора: можно ничего не делать, эстетика
+            });
+        });
+    })();
+</script>
+</body>
+</html>
